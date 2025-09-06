@@ -58,9 +58,9 @@ const PixiCanvas = () => {
                         anchor={0.5}
                         style={{
                             fontSize: 30,
-                            fill: "#ffffff",
+                            fill: "#39FF14",
                             dropShadow: {
-                                color: "#fff",
+                                color: "#39FF14",
                                 blur: 5,
                                 distance: 4,
                                 angle: Math.PI / 4,
