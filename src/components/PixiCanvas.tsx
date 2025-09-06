@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+'use client'
+
+import { useEffect, useState, useRef } from "react";
 import { Application, extend } from "@pixi/react";
 import { Container, Text } from "pixi.js";
 
 extend({ Container, Text });
 
 const PixiCanvas = () => {
+    const parentRef = useRef<HTMLDivElement>(null);
     const [windowReady, setWindowReady] = useState<boolean>(false);
 
 
@@ -15,9 +18,9 @@ const PixiCanvas = () => {
     if (!windowReady) return null;
 
     return (
-        <section className="overflow-hidden">
+        <section ref={parentRef} className="h-screen w-screen">
             <Application
-                resizeTo={window}
+                resizeTo={parentRef}
                 background="#121212"
                 autoStart
             >
