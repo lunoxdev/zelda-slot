@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { Application, extend } from "@pixi/react";
+import { useEffect, useState } from "react";
+import { extend } from "@pixi/react";
 import { Container, Text, Sprite, Assets, Texture } from "pixi.js";
 
 extend({ Container, Text, Sprite });
@@ -12,7 +12,6 @@ const SYMBOL_WIDTH = 110;
 const SYMBOL_HEIGHT = 190;
 
 const PixiCanvas = () => {
-  const parentRef = useRef<HTMLElement>(null);
   const [shieldTexture, setShieldTexture] = useState<Texture | null>(null);
   const [slotTextures, setSlotTextures] = useState<Texture[]>([]);
   const [reels, setReels] = useState<Texture[][]>([]);
@@ -50,34 +49,35 @@ const PixiCanvas = () => {
     return null;
 
   return (
-    <section ref={parentRef} className="h-screen w-screen">
-      <Application resizeTo={parentRef} background="#121212" autoStart>
-        {/* Game title */}
-        <pixiContainer x={window.innerWidth / 2} y={(window.innerHeight / 2) - 400}>
-          <pixiText
-            text="Zelda Slot"
-            anchor={0.5}
-            style={{
-              fontSize: 30,
-              fill: "#39FF14",
-              dropShadow: {
-                color: "#39FF14",
-                blur: 5,
-                distance: 4,
-                angle: Math.PI / 4,
-                alpha: 0.5,
-              },
-            }}
-          />
-        </pixiContainer>
-
-        {/* Slot machine reels */}
-        <pixiContainer
-          x={window.innerWidth / 2}
-          y={window.innerHeight / 2 - 250}
+    <>
+      {/* Game title */}
+      < pixiContainer x={window.innerWidth / 2} y={(window.innerHeight / 2) - 400
+      }>
+        <pixiText
+          text="Zelda Slot"
           anchor={0.5}
-        >
-          {reels.map((column, colIndex) => (
+          style={{
+            fontSize: 30,
+            fill: "#39FF14",
+            dropShadow: {
+              color: "#39FF14",
+              blur: 5,
+              distance: 4,
+              angle: Math.PI / 4,
+              alpha: 0.5,
+            },
+          }}
+        />
+      </pixiContainer >
+
+      {/* Slot machine reels */}
+      < pixiContainer
+        x={window.innerWidth / 2}
+        y={window.innerHeight / 2 - 250}
+        anchor={0.5}
+      >
+        {
+          reels.map((column, colIndex) => (
             <pixiContainer key={colIndex} x={(colIndex - 1) * (SYMBOL_WIDTH + 10)} y={0}>
               {column.map((texture, rowIndex) => (
                 <pixiSprite
@@ -91,23 +91,23 @@ const PixiCanvas = () => {
                 />
               ))}
             </pixiContainer>
-          ))}
-        </pixiContainer>
+          ))
+        }
+      </pixiContainer >
 
-        {/* Zelda shield spin button */}
-        <pixiSprite
-          texture={shieldTexture}
-          x={window.innerWidth / 2}
-          y={(window.innerHeight / 2) + 350}
-          anchor={0.5}
-          width={120}
-          height={140}
-          eventMode="static"
-          cursor="pointer"
-          onPointerDown={spinSlots}
-        />
-      </Application>
-    </section>
+      {/* Zelda shield spin button */}
+      < pixiSprite
+        texture={shieldTexture}
+        x={window.innerWidth / 2}
+        y={(window.innerHeight / 2) + 350}
+        anchor={0.5}
+        width={120}
+        height={140}
+        eventMode="static"
+        cursor="pointer"
+        onPointerDown={spinSlots}
+      />
+    </>
   );
 };
 
