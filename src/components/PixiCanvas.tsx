@@ -2,19 +2,19 @@
 
 import { useEffect, useState, useRef } from "react";
 import { Application, extend } from "@pixi/react";
-import { Container, Text, Sprite, Assets } from "pixi.js";
+import { Container, Text, Sprite, Assets, Texture } from "pixi.js";
 
 extend({ Container, Text, Sprite });
 
 const PixiCanvas = () => {
-  const parentRef = useRef<HTMLDivElement>(null);
+  const parentRef = useRef<HTMLElement>(null);
   const [windowReady, setWindowReady] = useState<boolean>(false);
-  const [shieldTexture, setShieldTexture] = useState(null);
-  const [linkTexture, setLinkTexture] = useState(null);
-  const [zeldaTexture, setZeldaTexture] = useState(null);
-  const [ganonTexture, setGanonTexture] = useState(null);
-  const [slotTextures, setSlotTextures] = useState<Array<any>>([]);
-  const [slotResults, setSlotResults] = useState<any[]>([]);
+  const [shieldTexture, setShieldTexture] = useState<Texture | null>(null);
+  const [linkTexture, setLinkTexture] = useState<Texture | null>(null);
+  const [zeldaTexture, setZeldaTexture] = useState<Texture | null>(null);
+  const [ganonTexture, setGanonTexture] = useState<Texture | null>(null);
+  const [slotTextures, setSlotTextures] = useState<Texture[]>([]);
+  const [slotResults, setSlotResults] = useState<Texture[]>([]);
 
   useEffect(() => {
     setWindowReady(true);
