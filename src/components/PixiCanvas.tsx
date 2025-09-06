@@ -2,19 +2,29 @@
 
 import { useEffect, useState, useRef } from "react";
 import { Application, extend } from "@pixi/react";
-import { Container, Text } from "pixi.js";
+import { Container, Text, Sprite, Assets } from "pixi.js";
 
-extend({ Container, Text });
+extend({ Container, Text, Sprite });
 
 const PixiCanvas = () => {
     const parentRef = useRef<HTMLDivElement>(null);
     const [windowReady, setWindowReady] = useState<boolean>(false);
+    const [shieldTexture, setShieldTexture] = useState(null);
 
     useEffect(() => {
         setWindowReady(true);
     }, []);
 
-    if (!windowReady) return null;
+    useEffect(() => {
+        const loadShield = async () => {
+            const texture = await Assets.load("/assets/zelda-shield.png");
+            setShieldTexture(texture);
+        };
+
+        loadShield();
+    }, []);
+
+    if (!windowReady || !shieldTexture) return null;
 
     return (
         <section ref={parentRef} className="h-screen w-screen">
@@ -33,31 +43,6 @@ const PixiCanvas = () => {
                         anchor={0.5}
                         style={{
                             fontSize: 30,
-                            fill: "#ffffff",
-                            dropShadow: {
-                                color: "#fff",
-                                blur: 5,
-                                distance: 4,
-                                angle: Math.PI / 4,
-                                alpha: 0.5,
-                            },
-                        }}
-                    />
-                </pixiContainer>
-
-                {/* Spin button */}
-                <pixiContainer
-                    x={window.innerWidth / 2}
-                    y={(window.innerHeight / 2) + 300}
-                    eventMode="static"
-                    cursor="pointer"
-                    onPointerDown={() => console.log("Spin button clicked!")}
-                >
-                    <pixiText
-                        text="Spin"
-                        anchor={0.5}
-                        style={{
-                            fontSize: 30,
                             fill: "#39FF14",
                             dropShadow: {
                                 color: "#39FF14",
@@ -69,6 +54,19 @@ const PixiCanvas = () => {
                         }}
                     />
                 </pixiContainer>
+
+                {/* Zelda shield spin button */}
+                <pixiSprite
+                    texture={shieldTexture}
+                    x={window.innerWidth / 2}
+                    y={(window.innerHeight / 2) + 250}
+                    anchor={0.5}
+                    width={100}
+                    height={110}
+                    eventMode="static"
+                    cursor="pointer"
+                    onPointerDown={() => console.log("Spin Button clicked!")}
+                />
             </Application>
         </section>
     );
