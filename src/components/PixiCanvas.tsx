@@ -6,19 +6,16 @@ import { Container, Text, Sprite, Assets, Texture } from "pixi.js";
 
 extend({ Container, Text, Sprite });
 
+const NUM_REELS = 3;
+const SYMBOLS_PER_REEL = 3;
+const SYMBOL_WIDTH = 110;
+const SYMBOL_HEIGHT = 190;
+
 const PixiCanvas = () => {
   const parentRef = useRef<HTMLElement>(null);
-  const [windowReady, setWindowReady] = useState<boolean>(false);
   const [shieldTexture, setShieldTexture] = useState<Texture | null>(null);
-  const [linkTexture, setLinkTexture] = useState<Texture | null>(null);
-  const [zeldaTexture, setZeldaTexture] = useState<Texture | null>(null);
-  const [ganonTexture, setGanonTexture] = useState<Texture | null>(null);
   const [slotTextures, setSlotTextures] = useState<Texture[]>([]);
-  const [slotResults, setSlotResults] = useState<Texture[]>([]);
-
-  useEffect(() => {
-    setWindowReady(true);
-  }, []);
+  const [reels, setReels] = useState<Texture[][]>([]);
 
   useEffect(() => {
     const loadAssets = async () => {
@@ -28,41 +25,35 @@ const PixiCanvas = () => {
       const ganon = await Assets.load("/assets/ganon.webp");
 
       setShieldTexture(shield);
-      setLinkTexture(link);
-      setZeldaTexture(zelda);
-      setGanonTexture(ganon);
-
       const textures = [link, zelda, ganon];
       setSlotTextures(textures);
-      setSlotResults([textures[0], textures[1], textures[2]]); // Initial random display
+      setReels(generateReels(textures));
     };
 
     loadAssets();
   }, []);
 
-  if (
-    !windowReady ||
-    !shieldTexture ||
-    !linkTexture ||
-    !zeldaTexture ||
-    !ganonTexture
-  )
-    return null;
+  const generateReels = (textures: Texture[]): Texture[][] => {
+    return Array.from({ length: NUM_REELS }, () =>
+      Array.from({ length: SYMBOLS_PER_REEL }, () => {
+        const i = Math.floor(Math.random() * textures.length);
+        return textures[i];
+      })
+    );
+  };
 
   const spinSlots = () => {
-    const newResults = slotTextures.map(() => {
-      const randomOrder = Math.floor(Math.random() * slotTextures.length);
-      return slotTextures[randomOrder];
-    });
-
-    setSlotResults(newResults);
+    setReels(generateReels(slotTextures));
   };
+
+  if (!shieldTexture || slotTextures.length === 0 || reels.length === 0)
+    return null;
 
   return (
     <section ref={parentRef} className="h-screen w-screen">
       <Application resizeTo={parentRef} background="#121212" autoStart>
         {/* Game title */}
-        <pixiContainer x={window.innerWidth / 2} y={window.innerHeight / 5}>
+        <pixiContainer x={window.innerWidth / 2} y={(window.innerHeight / 2) - 400}>
           <pixiText
             text="Zelda Slot"
             anchor={0.5}
@@ -80,22 +71,26 @@ const PixiCanvas = () => {
           />
         </pixiContainer>
 
-        {/* Slot machine display */}
+        {/* Slot machine reels */}
         <pixiContainer
           x={window.innerWidth / 2}
-          y={window.innerHeight / 2 + -50}
+          y={window.innerHeight / 2 - 250}
           anchor={0.5}
         >
-          {slotResults.map((texture, index) => (
-            <pixiSprite
-              key={index}
-              texture={texture}
-              x={(index - 1) * 220}
-              y={0}
-              anchor={0.5}
-              width={200}
-              height={400}
-            />
+          {reels.map((column, colIndex) => (
+            <pixiContainer key={colIndex} x={(colIndex - 1) * (SYMBOL_WIDTH + 10)} y={0}>
+              {column.map((texture, rowIndex) => (
+                <pixiSprite
+                  key={rowIndex}
+                  texture={texture}
+                  x={0}
+                  y={rowIndex * (SYMBOL_HEIGHT + 10)}
+                  anchor={0.5}
+                  width={SYMBOL_WIDTH}
+                  height={SYMBOL_HEIGHT}
+                />
+              ))}
+            </pixiContainer>
           ))}
         </pixiContainer>
 
@@ -103,10 +98,10 @@ const PixiCanvas = () => {
         <pixiSprite
           texture={shieldTexture}
           x={window.innerWidth / 2}
-          y={window.innerHeight / 2 + 250}
+          y={(window.innerHeight / 2) + 350}
           anchor={0.5}
-          width={100}
-          height={110}
+          width={120}
+          height={140}
           eventMode="static"
           cursor="pointer"
           onPointerDown={spinSlots}
