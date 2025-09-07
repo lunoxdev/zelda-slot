@@ -22,10 +22,13 @@ const PixiCanvas = () => {
 
   // Function to start the spinning animation for all reels
   const startSpinning = () => {
+    if (isSpinning1 || isSpinning2 || isSpinning3) return;
+
     setIsSpinning1(true);
     setTimeout(() => setIsSpinning2(true), 200);
     setTimeout(() => setIsSpinning3(true), 300);
   };
+
 
   if (!shieldTexture) return null;
 
