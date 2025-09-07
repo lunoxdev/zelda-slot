@@ -1,42 +1,48 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { extend } from "@pixi/react";
 import { Container, Text, Sprite, Texture } from "pixi.js";
 
 import { loadTextures } from "../game/textures";
-import Reel from "./Reel";
+import Reel, { ReelRef } from "./Reel"; // Reel is the default export, ReelRef is a named export
 import GameTitle from "./GameTitle";
 
 extend({ Container, Text, Sprite });
 
 const PixiCanvas = () => {
   const [shieldTexture, setShieldTexture] = useState<Texture | null>(null);
+  // Create refs for each reel to control their spin animations
+  const reel1 = useRef<ReelRef>(null);
+  const reel2 = useRef<ReelRef>(null);
+  const reel3 = useRef<ReelRef>(null);
 
   useEffect(() => {
-    const loadAssets = async () => {
-      const { shield } = await loadTextures();
-      setShieldTexture(shield);
-    };
-    loadAssets();
+    // Load assets (textures) when the component mounts
+    loadTextures().then(({ shield }) => setShieldTexture(shield));
   }, []);
 
-  const spinSlots = () => console.log("spin button");
+  // Function to start the spinning animation for all reels
+  const startSpinning = () => {
+    reel1.current?.spin(); // Spin the first reel immediately
+    setTimeout(() => reel2.current?.spin(), 200); // Spin the second reel after a short delay
+    setTimeout(() => reel3.current?.spin(), 300); // Spin the third reel after a slightly longer delay
+  };
 
   if (!shieldTexture) return null;
 
   return (
     <>
-      {/* Game title */}
       <GameTitle />
 
-      {/* Separate reels */}
+      {/* Reel container */}
       <pixiContainer
         x={window.innerWidth / 2}
         y={window.innerHeight / 2 - 250}
         anchor={0.5}
       >
-        <Reel x={-130} y={0} />
-        <Reel x={0} y={0} />
-        <Reel x={130} y={0} />
+        {/* Individual Reel components with refs */}
+        <Reel ref={reel1} x={-130} y={0} />
+        <Reel ref={reel2} x={0} y={0} />
+        <Reel ref={reel3} x={130} y={0} />
       </pixiContainer>
 
       {/* Spin button */}
@@ -49,7 +55,7 @@ const PixiCanvas = () => {
         height={140}
         eventMode="static"
         cursor="pointer"
-        onPointerDown={spinSlots}
+        onPointerDown={startSpinning}
       />
     </>
   );

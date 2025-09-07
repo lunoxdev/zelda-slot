@@ -10,6 +10,8 @@
     "format": "biome format --write"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "gsap": "^3.12.5",
     "@pixi/devtools": "^2.0.1",
     "@pixi/react": "8.0.0-beta.25",
     "next": "15.5.2",
