@@ -1,4 +1,4 @@
-import { Container, Sprite, Texture } from "pixi.js";
+import { Container, Graphics, Sprite, Texture } from "pixi.js";
 import { extend } from "@pixi/react";
 import { loadTextures } from "../game/textures";
 import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
@@ -10,16 +10,20 @@ const SYMBOLS = 3; // Number of symbols per reel
 const WIDTH = 110;
 const HEIGHT = 190;
 const GAP = 20;
-const STEP = HEIGHT + GAP; // Total height of a symbol plus gap, used for movement
+const STEP = HEIGHT + GAP;
+
+// Fits 3 symbols with internal gaps
+const VISIBLE_HEIGHT = SYMBOLS * STEP - GAP;
 
 export interface ReelRef {
     spin: () => void;
 }
 
 const Reel = forwardRef<ReelRef, { x: number; y: number }>(({ x, y }, ref) => {
-    const containerRef = useRef<Container>(null); // Ref to the Pixi container for the reel
-    const spritesRef = useRef<Sprite[]>([]); // Ref to hold the Pixi sprites (symbols)
-    const texturesRef = useRef<Texture[]>([]); // Ref to hold all available symbol textures
+    const viewportRef = useRef<Container>(null); // Defines the visible area
+    const contentRef = useRef<Container>(null); // Animated vertically container
+    const spritesRef = useRef<Sprite[]>([]); // Hold the Pixi sprites (symbols)
+    const texturesRef = useRef<Texture[]>([]); // Hold all available symbol textures
 
     // Function to get a random texture from the loaded slot textures
     const randTexture = () =>
@@ -34,34 +38,60 @@ const Reel = forwardRef<ReelRef, { x: number; y: number }>(({ x, y }, ref) => {
     };
 
     useEffect(() => {
-        // Load slot textures and initialize the reel with sprites
+        let destroyed = false;
+
         loadTextures().then(({ slotTextures }) => {
+            if (destroyed) return;
+
             texturesRef.current = slotTextures;
-            if (containerRef.current) {
-                for (let i = 0; i < SYMBOLS; i++) {
-                    const s = new Sprite(randTexture()); // Create a new sprite with a random texture
-                    s.anchor.set(0.5); // Set anchor to center for proper positioning
-                    s.x = 0;
-                    s.y = i * STEP; // Position sprites with a gap
-                    s.width = WIDTH;
-                    s.height = HEIGHT;
-                    containerRef.current.addChild(s); // Add sprite to the reel container
-                    spritesRef.current.push(s); // Store sprite ref
-                }
+
+            // Animated sprites within content
+            const content = contentRef.current;
+            if (!content) return;
+
+            for (let i = 0; i < SYMBOLS; i++) {
+                const s = new Sprite(randTexture());
+                s.anchor.set(0.5);
+                s.x = 0;
+                s.y = i * STEP;
+                s.width = WIDTH;
+                s.height = HEIGHT;
+                content.addChild(s);
+                spritesRef.current.push(s);
             }
+
+            // Static mask in viewport
+            const viewport = viewportRef.current;
+            if (!viewport) return;
+
+            const mask = new Graphics();
+            mask.beginFill(0xffffff);
+            // Center the mask horizontally and crop from y=0 downward; -WIDTH/2 aligns with center-anchored sprites
+            const EXTRA_CUT = 100;
+            mask.drawRect(-WIDTH / 2, 0, WIDTH, VISIBLE_HEIGHT - EXTRA_CUT);
+            mask.endFill();
+            viewport.addChild(mask);
+
+            viewport.mask = mask;
         });
+
+        return () => {
+            destroyed = true;
+        };
     }, []);
 
     useImperativeHandle(ref, () => ({
         spin: () => {
-            if (!containerRef.current) return;
-            const c = containerRef.current;
+            const c = contentRef.current;
+            if (!c) return;
+
             let moved = 0;
 
             // Function to move the reel and rotate textures as needed
             const move = (speed: number) => {
                 c.y += speed; // Move the container down
                 moved += speed;
+
                 while (moved >= STEP) {
                     moved -= STEP;
                     c.y -= STEP; // Reset container position for seamless looping
@@ -77,7 +107,11 @@ const Reel = forwardRef<ReelRef, { x: number; y: number }>(({ x, y }, ref) => {
         }
     }));
 
-    return <pixiContainer ref={containerRef} x={x} y={y} />;
+    return (
+        <pixiContainer ref={viewportRef} x={x} y={y}>
+            <pixiContainer ref={contentRef} />
+        </pixiContainer>
+    );
 });
 
 export default Reel;

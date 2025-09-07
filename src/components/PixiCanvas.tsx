@@ -36,7 +36,7 @@ const PixiCanvas = () => {
       {/* Reel container */}
       <pixiContainer
         x={window.innerWidth / 2}
-        y={window.innerHeight / 2 - 250}
+        y={window.innerHeight / 5}
         anchor={0.5}
       >
         {/* Individual Reel components with refs */}
@@ -49,7 +49,7 @@ const PixiCanvas = () => {
       <pixiSprite
         texture={shieldTexture}
         x={window.innerWidth / 2}
-        y={window.innerHeight / 2 + 350}
+        y={window.innerHeight / 2 + 330}
         anchor={0.5}
         width={120}
         height={140}
