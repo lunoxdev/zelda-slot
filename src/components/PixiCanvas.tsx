@@ -21,8 +21,7 @@ const PixiCanvas = () => {
 
   const spinSlots = () => console.log("spin button");
 
-  if (!shieldTexture)
-    return null;
+  if (!shieldTexture) return null;
 
   return (
     <>
