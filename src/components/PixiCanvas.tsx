@@ -71,7 +71,7 @@ const PixiCanvas = () => {
         width={120}
         height={140}
         eventMode="static"
-        cursor="pointer"
+        cursor={`${isSpinning1 || isSpinning2 || isSpinning3 ? "not-allowed" : "pointer"}`}
         onPointerDown={startSpinning}
       />
     </>
