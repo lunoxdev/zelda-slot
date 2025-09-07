@@ -42,9 +42,24 @@ const PixiCanvas = () => {
         anchor={0.5}
       >
         {/* Individual Reel components with refs */}
-        <Reel x={-130} y={0} shouldSpin={isSpinning1} />
-        <Reel x={0} y={0} shouldSpin={isSpinning2} />
-        <Reel x={130} y={0} shouldSpin={isSpinning3} />
+        <Reel
+          x={-130}
+          y={0}
+          shouldSpin={isSpinning1}
+          onSpinComplete={() => setIsSpinning1(false)}
+        />
+        <Reel
+          x={0}
+          y={0}
+          shouldSpin={isSpinning2}
+          onSpinComplete={() => setIsSpinning2(false)}
+        />
+        <Reel
+          x={130}
+          y={0}
+          shouldSpin={isSpinning3}
+          onSpinComplete={() => setIsSpinning3(false)}
+        />
       </pixiContainer>
 
       {/* Spin button */}

@@ -8,7 +8,12 @@ import { SYMBOLS, WIDTH, HEIGHT, STEP, VISIBLE_HEIGHT } from "../game/constants"
 extend({ Container, Sprite });
 
 
-const Reel = ({ x, y, shouldSpin }: { x: number; y: number; shouldSpin: boolean }) => {
+const Reel = ({ x, y, shouldSpin, onSpinComplete }: {
+    x: number;
+    y: number;
+    shouldSpin: boolean;
+    onSpinComplete: () => void
+}) => {
     const viewportRef = useRef<Container>(null); // Defines the visible area
     const contentRef = useRef<Container>(null); // Animated vertically container
     const spritesRef = useRef<Sprite[]>([]); // Hold the Pixi sprites (symbols)
@@ -88,10 +93,33 @@ const Reel = ({ x, y, shouldSpin }: { x: number; y: number; shouldSpin: boolean 
             };
 
             // GSAP timeline for the spinning animation
-            gsap.timeline()
-                .to({}, { duration: 0.8, ease: "power2.in", onUpdate: () => move(40) }) // Accelerate spin
-                .to({}, { duration: 1, ease: "none", onUpdate: () => move(40) }) // Constant spin speed
-                .to({}, { duration: 1, ease: "power2.out", onUpdate: () => move(20), onComplete: () => { c.y = 0; } }); // Decelerate spin
+            gsap
+                .timeline()
+                // Accelerate spin
+                .to({}, {
+                    duration: 0.8,
+                    ease: "power2.in",
+                    onUpdate: () => move(80)
+                })
+                // Constant spin speed
+                .to({}, {
+                    duration: 1,
+                    ease: "none",
+                    onUpdate: () => move(80)
+                })
+                // Decelerate spin
+                .to(
+                    {},
+                    {
+                        duration: 1,
+                        ease: "power2.out",
+                        onUpdate: () => move(60),
+                        onComplete: () => {
+                            c.y = 0;
+                            onSpinComplete();
+                        },
+                    }
+                );
         }
     }, [shouldSpin]);
 
