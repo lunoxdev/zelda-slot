@@ -31,12 +31,14 @@ const PixiCanvas = () => {
 
   return (
     <>
-      <GameTitle />
+      <pixiContainer x={window.innerWidth / 2} y={window.innerHeight / 2 - 400}>
+        <GameTitle />
+      </pixiContainer>
 
       {/* Reel container */}
       <pixiContainer
         x={window.innerWidth / 2}
-        y={window.innerHeight / 5}
+        y={window.innerHeight / 2 - 250}
         anchor={0.5}
       >
         {/* Individual Reel components with refs */}
@@ -49,7 +51,7 @@ const PixiCanvas = () => {
       <pixiSprite
         texture={shieldTexture}
         x={window.innerWidth / 2}
-        y={window.innerHeight / 2 + 330}
+        y={window.innerHeight / 2 + 370}
         anchor={0.5}
         width={120}
         height={140}

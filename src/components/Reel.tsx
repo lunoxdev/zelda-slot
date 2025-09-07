@@ -66,9 +66,8 @@ const Reel = forwardRef<ReelRef, { x: number; y: number }>(({ x, y }, ref) => {
 
             const mask = new Graphics();
             mask.beginFill(0xffffff);
-            // Center the mask horizontally and crop from y=0 downward; -WIDTH/2 aligns with center-anchored sprites
-            const EXTRA_CUT = 100;
-            mask.drawRect(-WIDTH / 2, 0, WIDTH, VISIBLE_HEIGHT - EXTRA_CUT);
+            // Position and size the mask to correctly display the three symbols
+            mask.drawRect(-WIDTH / 2, -HEIGHT / 2, WIDTH, VISIBLE_HEIGHT);
             mask.endFill();
             viewport.addChild(mask);
 
