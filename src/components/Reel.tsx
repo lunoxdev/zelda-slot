@@ -1,17 +1,14 @@
 import { Container, Graphics, Sprite, Texture } from "pixi.js";
 import { extend } from "@pixi/react";
 import { loadTextures } from "../game/textures";
-import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { SYMBOLS, WIDTH, HEIGHT, STEP, VISIBLE_HEIGHT } from "../game/constants";
 
 extend({ Container, Sprite });
 
-export interface ReelRef {
-    spin: () => void;
-}
 
-const Reel = forwardRef<ReelRef, { x: number; y: number }>(({ x, y }, ref) => {
+const Reel = ({ x, y, shouldSpin }: { x: number; y: number; shouldSpin: boolean }) => {
     const viewportRef = useRef<Container>(null); // Defines the visible area
     const contentRef = useRef<Container>(null); // Animated vertically container
     const spritesRef = useRef<Sprite[]>([]); // Hold the Pixi sprites (symbols)
@@ -71,8 +68,8 @@ const Reel = forwardRef<ReelRef, { x: number; y: number }>(({ x, y }, ref) => {
         };
     }, []);
 
-    useImperativeHandle(ref, () => ({
-        spin: () => {
+    useEffect(() => {
+        if (shouldSpin) {
             const c = contentRef.current;
             if (!c) return;
 
@@ -96,13 +93,13 @@ const Reel = forwardRef<ReelRef, { x: number; y: number }>(({ x, y }, ref) => {
                 .to({}, { duration: 1, ease: "none", onUpdate: () => move(40) }) // Constant spin speed
                 .to({}, { duration: 1, ease: "power2.out", onUpdate: () => move(20), onComplete: () => { c.y = 0; } }); // Decelerate spin
         }
-    }));
+    }, [shouldSpin]);
 
     return (
         <pixiContainer ref={viewportRef} x={x} y={y}>
             <pixiContainer ref={contentRef} />
         </pixiContainer>
     );
-});
+};
 
 export default Reel;
