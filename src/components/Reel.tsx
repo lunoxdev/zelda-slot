@@ -3,17 +3,9 @@ import { extend } from "@pixi/react";
 import { loadTextures } from "../game/textures";
 import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import gsap from "gsap";
+import { SYMBOLS, WIDTH, HEIGHT, STEP, VISIBLE_HEIGHT } from "../game/constants";
 
 extend({ Container, Sprite });
-
-const SYMBOLS = 4; // Symbols per reel + 1 extra to avoid top gap
-const WIDTH = 110;
-const HEIGHT = 190;
-const GAP = 20;
-const STEP = HEIGHT + GAP;
-
-// Fits 3 symbols with internal gaps
-const VISIBLE_HEIGHT = 3 * STEP - GAP; // Visible area showing 3 symbols with spacing
 
 export interface ReelRef {
     spin: () => void;
