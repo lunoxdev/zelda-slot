@@ -5,6 +5,7 @@ import { Container, Text, Sprite, Texture } from "pixi.js";
 import { loadTextures } from "../game/textures";
 import Reel from "./Reel";
 import GameTitle from "./GameTitle";
+import Background from "./Background";
 
 extend({ Container, Text, Sprite });
 
@@ -34,6 +35,8 @@ const PixiCanvas = () => {
 
   return (
     <>
+      <Background />
+
       <pixiContainer x={window.innerWidth / 2} y={window.innerHeight / 2 - 400}>
         <GameTitle />
       </pixiContainer>
