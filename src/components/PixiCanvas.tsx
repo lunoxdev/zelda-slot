@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { extend } from "@pixi/react";
-import { Container, Text, Sprite, Assets, Texture } from "pixi.js";
+import { Container, Text, Sprite, Texture } from "pixi.js";
+
+import { loadTextures } from "../game/textures"
 
 extend({ Container, Text, Sprite });
 
@@ -18,15 +20,11 @@ const PixiCanvas = () => {
 
   useEffect(() => {
     const loadAssets = async () => {
-      const shield = await Assets.load("/assets/zelda-shield.png");
-      const link = await Assets.load("/assets/link.webp");
-      const zelda = await Assets.load("/assets/zelda.webp");
-      const ganon = await Assets.load("/assets/ganon.webp");
+      const { shield, slotTextures } = await loadTextures();
 
       setShieldTexture(shield);
-      const textures = [link, zelda, ganon];
-      setSlotTextures(textures);
-      setReels(generateReels(textures));
+      setSlotTextures(slotTextures);
+      setReels(generateReels(slotTextures));
     };
 
     loadAssets();
@@ -96,7 +94,7 @@ const PixiCanvas = () => {
       </pixiContainer >
 
       {/* Zelda shield spin button */}
-      < pixiSprite
+      <pixiSprite
         texture={shieldTexture}
         x={window.innerWidth / 2}
         y={(window.innerHeight / 2) + 350}
