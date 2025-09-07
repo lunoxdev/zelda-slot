@@ -45,19 +45,19 @@ const PixiCanvas = () => {
         <Reel
           x={-130}
           y={0}
-          shouldSpin={isSpinning1}
+          isSpinning={isSpinning1}
           onSpinComplete={() => setIsSpinning1(false)}
         />
         <Reel
           x={0}
           y={0}
-          shouldSpin={isSpinning2}
+          isSpinning={isSpinning2}
           onSpinComplete={() => setIsSpinning2(false)}
         />
         <Reel
           x={130}
           y={0}
-          shouldSpin={isSpinning3}
+          isSpinning={isSpinning3}
           onSpinComplete={() => setIsSpinning3(false)}
         />
       </pixiContainer>

@@ -8,10 +8,10 @@ import { SYMBOLS, WIDTH, HEIGHT, STEP, VISIBLE_HEIGHT } from "../game/constants"
 extend({ Container, Sprite });
 
 
-const Reel = ({ x, y, shouldSpin, onSpinComplete }: {
+const Reel = ({ x, y, isSpinning, onSpinComplete }: {
     x: number;
     y: number;
-    shouldSpin: boolean;
+    isSpinning: boolean;
     onSpinComplete: () => void
 }) => {
     const viewportRef = useRef<Container>(null); // Defines the visible area
@@ -74,7 +74,7 @@ const Reel = ({ x, y, shouldSpin, onSpinComplete }: {
     }, []);
 
     useEffect(() => {
-        if (shouldSpin) {
+        if (isSpinning) {
             const c = contentRef.current;
             if (!c) return;
 
@@ -121,7 +121,7 @@ const Reel = ({ x, y, shouldSpin, onSpinComplete }: {
                     }
                 );
         }
-    }, [shouldSpin]);
+    }, [isSpinning]);
 
     return (
         <pixiContainer ref={viewportRef} x={x} y={y}>
