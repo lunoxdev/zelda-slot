@@ -44,13 +44,28 @@ const Reel = ({ x, y, isSpinning, onSpinComplete }: {
             if (!content) return;
 
             for (let i = 0; i < SYMBOLS; i++) {
+                // Container for the symbol
+                const card = new Container();
+                card.x = 0;
+                card.y = (i - 1) * STEP;
+
+                // Symbol sprite
                 const s = new Sprite(randTexture());
                 s.anchor.set(0.5);
-                s.x = 0;
-                s.y = (i - 1) * STEP; // Position starts at -STEP to hide first symbol above view
                 s.width = WIDTH;
                 s.height = HEIGHT;
-                content.addChild(s);
+                card.addChild(s);
+
+                // Simple rounded mask
+                const mask = new Graphics()
+                    .roundRect(-WIDTH / 2, -HEIGHT / 2, WIDTH, HEIGHT, 10) // x, y, w, h, radius
+                    .fill(0xffffff); // white fill for mask
+
+                card.addChild(mask);
+                card.mask = mask; // Apply mask to container
+
+                // Add to content and store sprite reference
+                content.addChild(card);
                 spritesRef.current.push(s);
             }
 
@@ -61,7 +76,7 @@ const Reel = ({ x, y, isSpinning, onSpinComplete }: {
             const mask = new Graphics();
             mask.beginFill(0xffffff);
             // Position and size the mask to correctly display the three symbols
-            mask.drawRect(-WIDTH / 2, -HEIGHT / 2, WIDTH, VISIBLE_HEIGHT);
+            mask.drawRoundedRect(-WIDTH / 2, -HEIGHT / 2, WIDTH, VISIBLE_HEIGHT, 10); // Border rounded
             mask.endFill();
             viewport.addChild(mask);
 
@@ -108,17 +123,15 @@ const Reel = ({ x, y, isSpinning, onSpinComplete }: {
                     onUpdate: () => move(80)
                 })
                 // Decelerate spin
-                .to(
-                    {},
-                    {
-                        duration: 1,
-                        ease: "power2.out",
-                        onUpdate: () => move(60),
-                        onComplete: () => {
-                            c.y = 0;
-                            onSpinComplete();
-                        },
-                    }
+                .to({}, {
+                    duration: 1,
+                    ease: "power2.out",
+                    onUpdate: () => move(60),
+                    onComplete: () => {
+                        c.y = 0;
+                        onSpinComplete();
+                    },
+                }
                 );
         }
     }, [isSpinning]);
