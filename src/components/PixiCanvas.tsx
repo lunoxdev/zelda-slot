@@ -49,7 +49,7 @@ const PixiCanvas = () => {
   return (
     <>
       {/* Game title */}
-      < pixiContainer x={window.innerWidth / 2} y={(window.innerHeight / 2) - 400
+      <pixiContainer x={window.innerWidth / 2} y={(window.innerHeight / 2) - 400
       }>
         <pixiText
           text="Zelda Slot"
@@ -69,7 +69,7 @@ const PixiCanvas = () => {
       </pixiContainer >
 
       {/* Slot machine reels */}
-      < pixiContainer
+      <pixiContainer
         x={window.innerWidth / 2}
         y={window.innerHeight / 2 - 250}
         anchor={0.5}
