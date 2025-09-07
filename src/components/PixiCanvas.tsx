@@ -14,7 +14,7 @@ const PixiCanvas = () => {
   // Create refs for each reel to control their spin animations
   const [isSpinning1, setIsSpinning1] = useState<boolean>(false);
   const [isSpinning2, setIsSpinning2] = useState<boolean>(false);
-  const [isSpinning3, setIsSpinning3] = useState<boolean>(false)
+  const [isSpinning3, setIsSpinning3] = useState<boolean>(false);
 
   useEffect(() => {
     // Load assets (textures) when the component mounts
@@ -29,7 +29,6 @@ const PixiCanvas = () => {
     setTimeout(() => setIsSpinning2(true), 200);
     setTimeout(() => setIsSpinning3(true), 300);
   };
-
 
   if (!shieldTexture) return null;
 
@@ -47,7 +46,6 @@ const PixiCanvas = () => {
         y={window.innerHeight / 2 - 250}
         anchor={0.5}
       >
-        {/* Individual Reel components with refs */}
         <Reel
           x={-130}
           y={0}
