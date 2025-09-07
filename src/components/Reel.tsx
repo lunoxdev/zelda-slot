@@ -6,14 +6,14 @@ import gsap from "gsap";
 
 extend({ Container, Sprite });
 
-const SYMBOLS = 3; // Number of symbols per reel
+const SYMBOLS = 4; // Symbols per reel + 1 extra to avoid top gap
 const WIDTH = 110;
 const HEIGHT = 190;
 const GAP = 20;
 const STEP = HEIGHT + GAP;
 
 // Fits 3 symbols with internal gaps
-const VISIBLE_HEIGHT = SYMBOLS * STEP - GAP;
+const VISIBLE_HEIGHT = 3 * STEP - GAP; // Visible area showing 3 symbols with spacing
 
 export interface ReelRef {
     spin: () => void;
@@ -53,7 +53,7 @@ const Reel = forwardRef<ReelRef, { x: number; y: number }>(({ x, y }, ref) => {
                 const s = new Sprite(randTexture());
                 s.anchor.set(0.5);
                 s.x = 0;
-                s.y = i * STEP;
+                s.y = (i - 1) * STEP; // Position starts at -STEP to hide first symbol above view
                 s.width = WIDTH;
                 s.height = HEIGHT;
                 content.addChild(s);
