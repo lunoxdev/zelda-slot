@@ -59,7 +59,7 @@ export const useReelSpin = (
           {
             duration: 1,
             ease: "power2.out",
-            onUpdate: () => move(60),
+            onUpdate: () => move(20),
             onComplete: () => {
               c.y = 0;
               onSpinComplete();
