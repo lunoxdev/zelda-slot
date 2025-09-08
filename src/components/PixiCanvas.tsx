@@ -4,6 +4,7 @@ import { Container, Text, Sprite, Texture } from "pixi.js";
 import { loadTextures } from "../game/textures";
 import Reel from "./Reel";
 import Background from "./Background";
+import SpinButton from "./SpinButton";
 
 extend({ Container, Text, Sprite });
 
@@ -75,16 +76,12 @@ const PixiCanvas = () => {
       </pixiContainer>
 
       {/* Spin button */}
-      <pixiSprite
+      <SpinButton
         texture={shieldTexture}
         x={window.innerWidth / 2}
-        y={window.innerHeight / 2 + 370}
-        anchor={0.5}
-        width={120}
-        height={140}
-        eventMode="static"
-        cursor={`${isSpinning1 || isSpinning2 || isSpinning3 ? "not-allowed" : "pointer"}`}
-        onPointerDown={startSpinning}
+        y={window.innerHeight / 2 + 360}
+        disabled={isSpinning1 || isSpinning2 || isSpinning3}
+        onClick={startSpinning}
       />
     </>
   );
