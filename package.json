@@ -11,9 +11,10 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
-    "gsap": "^3.12.5",
     "@pixi/devtools": "^2.0.1",
     "@pixi/react": "8.0.0-beta.25",
+    "gsap": "^3.12.5",
+    "howler": "^2.2.4",
     "next": "15.5.2",
     "pixi.js": "^8.2.6",
     "react": "19.1.0",
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.2.0",
     "@tailwindcss/postcss": "^4",
+    "@types/howler": "^2.2.12",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

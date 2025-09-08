@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { extend } from "@pixi/react";
 import { Container, Text, Sprite, Texture } from "pixi.js";
 import { loadTextures } from "../game/textures";
+import { playSound } from "../game/sounds";
 import Reel from "./Reel";
 import Background from "./Background";
 import SpinButton from "./SpinButton";
@@ -15,6 +16,7 @@ const PixiCanvas = () => {
   const [isSpinning1, setIsSpinning1] = useState<boolean>(false);
   const [isSpinning2, setIsSpinning2] = useState<boolean>(false);
   const [isSpinning3, setIsSpinning3] = useState<boolean>(false);
+  const [hasSpun, setHasSpun] = useState<boolean>(false);
 
   useEffect(() => {
     // Load assets (textures) when the component mounts
@@ -22,16 +24,24 @@ const PixiCanvas = () => {
       setShieldTexture(shield);
       setZeldaLogoTexture(zeldaLogo);
     });
+    playSound("kokiriForest");
   }, []);
 
   // Function to start the spinning animation for all reels
   const startSpinning = () => {
     if (isSpinning1 || isSpinning2 || isSpinning3) return;
-
+    
+    setHasSpun(true);
     setIsSpinning1(true);
     setTimeout(() => setIsSpinning2(true), 200);
     setTimeout(() => setIsSpinning3(true), 300);
   };
+
+  useEffect(() => {
+    if (hasSpun && !isSpinning1 && !isSpinning2 && !isSpinning3) {
+      playSound("skullKidLaugh");
+    }
+  }, [isSpinning1, isSpinning2, isSpinning3, hasSpun]);
 
   if (!shieldTexture || !zeldaLogoTexture) return null;
 
