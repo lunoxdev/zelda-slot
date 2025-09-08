@@ -4,6 +4,7 @@ import { Sprite, Texture } from "pixi.js";
 export const getRandomTexture = (textures: Texture[]) => {
   return textures[Math.floor(Math.random() * textures.length)];
 };
+
 // Rotate textures
 export const rotateTextures = (
   spritesRef: React.RefObject<Sprite[]>,

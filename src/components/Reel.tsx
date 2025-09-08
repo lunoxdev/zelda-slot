@@ -15,7 +15,7 @@ const Reel = ({ x, y, isSpinning, onSpinComplete }: {
     // Init Setup
     const { viewportRef, contentRef, spritesRef, texturesRef } = useReelSetup();
 
-    // Spin Animation
+    // Spin Reel Animation
     useReelSpin(isSpinning, contentRef, spritesRef, texturesRef, onSpinComplete);
 
     return (
