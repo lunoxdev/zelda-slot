@@ -59,10 +59,10 @@ export const useReelSetup = () => {
       if (!viewport) return;
 
       const mask = new Graphics();
-      mask.beginFill(0xffffff);
+      mask.fill(0xffffff);
       // Position and size the mask to correctly display the three symbols
-      mask.drawRoundedRect(-WIDTH / 2, -HEIGHT / 2, WIDTH, VISIBLE_HEIGHT, 10); // Border rounded
-      mask.endFill();
+      mask.roundRect(-WIDTH / 2, -HEIGHT / 2, WIDTH, VISIBLE_HEIGHT, 10); // Border rounded
+      mask.fill();
       viewport.addChild(mask);
 
       viewport.mask = mask;

@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import { extend } from "@pixi/react";
 import { Container, Text, Sprite, Texture } from "pixi.js";
-
 import { loadTextures } from "../game/textures";
 import Reel from "./Reel";
-import GameTitle from "./GameTitle";
 import Background from "./Background";
 
 extend({ Container, Text, Sprite });
 
 const PixiCanvas = () => {
   const [shieldTexture, setShieldTexture] = useState<Texture | null>(null);
+  const [zeldaLogoTexture, setZeldaLogoTexture] = useState<Texture | null>(null);
   // Create refs for each reel to control their spin animations
   const [isSpinning1, setIsSpinning1] = useState<boolean>(false);
   const [isSpinning2, setIsSpinning2] = useState<boolean>(false);
@@ -18,7 +17,10 @@ const PixiCanvas = () => {
 
   useEffect(() => {
     // Load assets (textures) when the component mounts
-    loadTextures().then(({ shield }) => setShieldTexture(shield));
+    loadTextures().then(({ shield, zeldaLogo }) => {
+      setShieldTexture(shield);
+      setZeldaLogoTexture(zeldaLogo);
+    });
   }, []);
 
   // Function to start the spinning animation for all reels
@@ -30,20 +32,26 @@ const PixiCanvas = () => {
     setTimeout(() => setIsSpinning3(true), 300);
   };
 
-  if (!shieldTexture) return null;
+  if (!shieldTexture || !zeldaLogoTexture) return null;
 
   return (
     <>
       <Background />
 
-      <pixiContainer x={window.innerWidth / 2} y={window.innerHeight / 2 - 400}>
-        <GameTitle />
-      </pixiContainer>
+      {/* Zelda logo */}
+      <pixiSprite
+        texture={zeldaLogoTexture}
+        x={window.innerWidth / 2}
+        y={window.innerHeight / 2 - 380}
+        anchor={0.5}
+        width={200}
+        height={80}
+      />
 
       {/* Reel container */}
       <pixiContainer
         x={window.innerWidth / 2}
-        y={window.innerHeight / 2 - 250}
+        y={window.innerHeight / 2 - 220}
         anchor={0.5}
       >
         <Reel
