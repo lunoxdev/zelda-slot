@@ -12,6 +12,11 @@ const sounds: Record<string, Howl> = {
     loop: false,
     volume: 1,
   }),
+  spinning: new Howl({
+    src: ["/assets/audio/slot-machine-sound.wav"],
+    loop: false,
+    volume: 1,
+  }),
 };
 
 // Funtions to interact with audios

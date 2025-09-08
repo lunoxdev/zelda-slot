@@ -33,6 +33,7 @@ const PixiCanvas = () => {
   const startSpinning = () => {
     if (isSpinning1 || isSpinning2 || isSpinning3) return;
 
+    playSound("spinning")
     setHasSpun(true);
     setIsSpinning1(true);
     setTimeout(() => setIsSpinning2(true), 200);
