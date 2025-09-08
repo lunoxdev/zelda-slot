@@ -4,6 +4,7 @@ import { loadTextures } from "../game/textures";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { SYMBOLS, WIDTH, HEIGHT, STEP, VISIBLE_HEIGHT } from "../game/constants";
+import { rotateTextures } from "./../utils/reelUtils"
 
 extend({ Container, Sprite });
 
@@ -22,14 +23,6 @@ const Reel = ({ x, y, isSpinning, onSpinComplete }: {
     // Function to get a random texture from the loaded slot textures
     const randTexture = () =>
         texturesRef.current[Math.floor(Math.random() * texturesRef.current.length)];
-
-    // Function to rotate the textures, simulating new symbols appearing at the top
-    const rotateTextures = () => {
-        for (let i = spritesRef.current.length - 1; i > 0; i--) {
-            spritesRef.current[i].texture = spritesRef.current[i - 1].texture; // Move texture down
-        }
-        spritesRef.current[0].texture = randTexture(); // Assign a new random texture to the top
-    };
 
     useEffect(() => {
         let destroyed = false;
@@ -103,7 +96,7 @@ const Reel = ({ x, y, isSpinning, onSpinComplete }: {
                 while (moved >= STEP) {
                     moved -= STEP;
                     c.y -= STEP; // Reset container position for seamless looping
-                    rotateTextures(); // Change textures to simulate new symbols
+                    rotateTextures(spritesRef, randTexture); // Change textures to simulate new symbols
                 }
             };
 
