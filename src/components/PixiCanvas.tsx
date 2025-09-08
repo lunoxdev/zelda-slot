@@ -50,7 +50,7 @@ const PixiCanvas = () => {
   return (
     <>
       <Background />
-      <pixiContainer scale={scale} x={window.innerWidth / 2} y={window.innerHeight / 2} anchor={0.5}>
+      <pixiContainer scale={scale} x={window.innerWidth / 2} y={window.innerHeight / 2 - 45} anchor={0.5}>
         {/* Zelda logo */}
         <pixiSprite
           texture={zeldaLogoTexture}

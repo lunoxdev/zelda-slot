@@ -8,7 +8,7 @@ export default function Home() {
   const parentRef = useRef<HTMLElement>(null);
 
   return (
-    <main ref={parentRef} className="h-dvh w-screen">
+    <main ref={parentRef} className="h-screen w-screen">
       <Application resizeTo={parentRef} background="#121212" autoStart>
         <PixiCanvas />
       </Application>
