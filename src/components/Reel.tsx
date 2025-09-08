@@ -4,7 +4,7 @@ import { loadTextures } from "../game/textures";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { SYMBOLS, WIDTH, HEIGHT, STEP, VISIBLE_HEIGHT } from "../game/constants";
-import { rotateTextures } from "./../utils/reelUtils"
+import { rotateTextures, getRandomTexture } from "./../utils/reelUtils"
 
 extend({ Container, Sprite });
 
@@ -19,10 +19,6 @@ const Reel = ({ x, y, isSpinning, onSpinComplete }: {
     const contentRef = useRef<Container>(null); // Animated vertically container
     const spritesRef = useRef<Sprite[]>([]); // Hold the Pixi sprites (symbols)
     const texturesRef = useRef<Texture[]>([]); // Hold all available symbol textures
-
-    // Function to get a random texture from the loaded slot textures
-    const randTexture = () =>
-        texturesRef.current[Math.floor(Math.random() * texturesRef.current.length)];
 
     useEffect(() => {
         let destroyed = false;
@@ -43,7 +39,7 @@ const Reel = ({ x, y, isSpinning, onSpinComplete }: {
                 card.y = (i - 1) * STEP;
 
                 // Symbol sprite
-                const s = new Sprite(randTexture());
+                const s = new Sprite(getRandomTexture(texturesRef.current));
                 s.anchor.set(0.5);
                 s.width = WIDTH;
                 s.height = HEIGHT;
@@ -96,7 +92,7 @@ const Reel = ({ x, y, isSpinning, onSpinComplete }: {
                 while (moved >= STEP) {
                     moved -= STEP;
                     c.y -= STEP; // Reset container position for seamless looping
-                    rotateTextures(spritesRef, randTexture); // Change textures to simulate new symbols
+                    rotateTextures(spritesRef, () => getRandomTexture(texturesRef.current)); // Change textures to simulate new symbols
                 }
             };
 
