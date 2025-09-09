@@ -48,7 +48,7 @@ export const useReelSpin = (
         .to(
           {},
           {
-            duration: 1,
+            duration: 1.2,
             ease: "none",
             onUpdate: () => move(80),
           }

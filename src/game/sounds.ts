@@ -20,16 +20,12 @@ const sounds: Record<string, Howl> = {
 };
 
 // Funtions to interact with audios
-export const playSound = (name: keyof typeof sounds) => {
+export const playSound = (name: string) => {
   sounds[name]?.play();
 };
 
-export const stopSound = (name: keyof typeof sounds) => {
+export const stopSound = (name: string) => {
   sounds[name]?.stop();
-};
-
-export const setVolume = (name: keyof typeof sounds, volume: number) => {
-  sounds[name]?.volume(volume);
 };
 
 export default sounds;
