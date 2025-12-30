@@ -12,7 +12,6 @@ extend({ Container, Text, Sprite });
 
 const PixiCanvas = () => {
   const [shieldTexture, setShieldTexture] = useState<Texture | null>(null);
-  const [zeldaLogoTexture, setZeldaLogoTexture] = useState<Texture | null>(null);
   // Create refs for each reel to control their spin animations
   const [isSpinning1, setIsSpinning1] = useState<boolean>(false);
   const [isSpinning2, setIsSpinning2] = useState<boolean>(false);
@@ -22,9 +21,8 @@ const PixiCanvas = () => {
 
   useEffect(() => {
     // Load assets (textures) when the component mounts
-    loadTextures().then(({ shield, zeldaLogo }) => {
+    loadTextures().then(({ shield }) => {
       setShieldTexture(shield);
-      setZeldaLogoTexture(zeldaLogo);
     });
     playSound("kokiriForest");
   }, []);
@@ -46,26 +44,16 @@ const PixiCanvas = () => {
     }
   }, [isSpinning1, isSpinning2, isSpinning3, hasSpun]);
 
-  if (!shieldTexture || !zeldaLogoTexture) return null;
+  if (!shieldTexture) return null;
 
   return (
     <>
       <Background />
       <pixiContainer scale={scale} x={window.innerWidth / 2} y={window.innerHeight / 2 - 40} anchor={0.5}>
-        {/* Zelda logo */}
-        <pixiSprite
-          texture={zeldaLogoTexture}
-          x={0}
-          y={-380}
-          anchor={0.5}
-          width={200}
-          height={80}
-        />
-
         {/* Reel container */}
         <pixiContainer
           x={0}
-          y={-220}
+          y={-230}
           anchor={0.5}
         >
           <Reel
@@ -92,7 +80,7 @@ const PixiCanvas = () => {
         <SpinButton
           texture={shieldTexture}
           x={0}
-          y={360}
+          y={340}
           disabled={isSpinning1 || isSpinning2 || isSpinning3}
           onClick={startSpinning}
         />

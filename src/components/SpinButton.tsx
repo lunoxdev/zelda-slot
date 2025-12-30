@@ -23,8 +23,8 @@ const SpinButton = ({ texture, x, y, disabled, onClick }: SpinButtonProps) => {
             scale={scale}
             eventMode="static"
             cursor={disabled ? "not-allowed" : "pointer"}
-            onPointerOver={() => setScale(0.5)}
-            onPointerOut={() => setScale(0.4)}
+            onPointerOver={() => setScale(0.4)}
+            onPointerOut={() => setScale(0.3)}
             onPointerDown={() => onClick()}
         />
     );
